@@ -15,6 +15,7 @@ log.basicConfig(level=log.INFO)
 
 METERS_TO_KM = 1 / 1000
 DEFAULT_MPH = 30
+DEFAULT_KPH = 48.2803 # 30 mph
 
 
 class NetworkType(Enum):
@@ -89,7 +90,7 @@ def parse_osmnx_graph(
     else:
         crs = LATLON_CRS
 
-    g = ox.add_edge_speeds(g)
+    g = ox.add_edge_speeds(g, fallback=DEFAULT_KPH)
     g = ox.add_edge_travel_times(g)
 
     length_meters = nx.get_edge_attributes(g, "length")
@@ -123,7 +124,7 @@ def parse_osmnx_graph(
             f"Warning: found {no_geom} links with no geometry; creating geometries from the node lat/lon"
         )
 
-    g = compress(g)
+    # g = compress(g)
 
     g.graph["crs"] = crs
 
