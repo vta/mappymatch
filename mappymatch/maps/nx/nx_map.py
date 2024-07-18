@@ -28,6 +28,11 @@ DEFAULT_GEOMETRY_KEY = "geometry"
 DEFAULT_METADATA_KEY = "metadata"
 DEFAULT_CRS_KEY = "crs"
 
+class Int64Encoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.int64):
+            return int(obj)
+        return json.JSONEncoder.default(self, obj)
 
 class NxMap(MapInterface):
     """
@@ -253,7 +258,7 @@ class NxMap(MapInterface):
         elif outfile.suffix == ".json":
             graph_dict = self.to_dict()
             with open(outfile, "w") as f:
-                json.dump(graph_dict, f)
+                json.dump(graph_dict, f, cls=Int64Encoder)
         else:
             raise TypeError("NxMap only supports writing to json files")
 
