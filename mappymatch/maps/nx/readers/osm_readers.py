@@ -85,7 +85,7 @@ def parse_osmnx_graph(
     g = graph
 
     if xy:
-        g = ox.project_graph(g, XY_CRS)
+        g = ox.project_graph(g, to_crs=XY_CRS)
         crs = XY_CRS
     else:
         crs = LATLON_CRS
